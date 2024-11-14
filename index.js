@@ -57,6 +57,7 @@ const app = express();
 const categoryRoute=require('./routes/categories');
 
 const blogRoute=require('./routes/blogsR');
+const ErrorHandler = require("./errorHandler/errorHandler");
 
 //allow us to read the body of the request
 app.use(express.json());
@@ -69,7 +70,7 @@ app.use('/categories',categoryRoute);
 
 app.use('/blogs',blogRoute);
 
-
+app.use(ErrorHandler)
 
 app.get("/nitu", (req, res) => {
   res.send("hiiiiiiii");

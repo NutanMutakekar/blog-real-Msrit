@@ -1,19 +1,21 @@
+const AppError = require("../AppError/AppError");
 const blogs = require("../models/blogsM");
 const category = require("../models/category");
 
 //these two routes(getALLBlogs and post) are triggered in two cases 1> /blogs/
 //2> /categories/categoryId/blogs/
 //to handle the create and getAll function we will add some new feature to it in order to set the categoryId in req.body while creating blog and fetching the all blogs that belogs to perticular categoryId
-exports.createBlog = async (req, res) => {
+exports.createBlog = async (req, res,next) => {
   try {
     var result;
     result = await category.findById(req.params.categoryId);
     // console.log({categoryId:req.paras.categoryId})
     if (!result) {
-      return res.status(404).json({
-        success: false,
-        message: "category not found"
-      });
+      // return res.status(404).json({
+      //   success: false,
+      //   message: "category not found"
+      // }); 
+      throw new AppError(404,"category not found from create blog")
     }
 
     req.body.categoryId = req.params.categoryId;
@@ -28,11 +30,12 @@ exports.createBlog = async (req, res) => {
       blogList: result,
     });
   } catch (error) {
-    res.status(404).json({
-      success: false,
-      message: "something went wrong",
-      error,
-    });
+    // res.status(404).json({
+    //   success: false,
+    //   message: "something went wrong",
+    //   error,
+    // });
+    next(error)
   }
 };
 
