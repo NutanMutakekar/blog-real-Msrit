@@ -46,6 +46,9 @@ const express = require("express");
 //always connet to the database before initializing the app
 // here we always use the same name as you exported in that file while creatingˀ
 const connectDB = require("./db");
+
+const morgan = require("morgan");
+
 connectDB();
 
 // const category = require("./models/category");
@@ -54,24 +57,26 @@ connectDB();
 
 const app = express();
 
-const categoryRoute=require('./routes/categories');
+const categoryRoute = require("./routes/categories");
 
-const blogRoute=require('./routes/blogsR');
+const blogRoute = require("./routes/blogsR");
 
+const errorHandler=require('./errorHandler/errorHandler')
+// const error=require();
+app.use(morgan("dev"));
 //allow us to read the body of the request
 app.use(express.json());
 
-app.use('/categories',categoryRoute);
+app.use("/categories", categoryRoute);
 
-// /categories/:categoryId/blogs   
+// /categories/:categoryId/blogs
 
 //this path is to establish one to many relationship
 
-app.use('/blogs',blogRoute);
+app.use("/blogs", blogRoute);
 
-
-
-app.get("/nitu", (req, res) => {
+app.use(errorHandler);
+app.get("/", (req, res) => {
   res.send("hiiiiiiii");
 });
 // app.post("/categories", async (req, res) => {
@@ -127,7 +132,7 @@ app.get("/nitu", (req, res) => {
 // )
 // app.put('/categories/:id',async(req,res)=>{
 //   try{
-//     const cat= await category.findByIdAndUpdate(req.params.id,req.body,{new :true}); 
+//     const cat= await category.findByIdAndUpdate(req.params.id,req.body,{new :true});
 //     res.status(200).json({
 //       success:true,
 //       message:"put method using find by id",
@@ -142,8 +147,6 @@ app.get("/nitu", (req, res) => {
 //   }
 // }
 // )
-
-
 
 // app.delete("/categories/:id", async (req, res) => {
 //   try {

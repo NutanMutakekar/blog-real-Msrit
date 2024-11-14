@@ -1,7 +1,7 @@
 const category = require("../models/category");
-
+const AppError=require("../AppError/AppError")
 const blogs=require("../models/blogsM")
-exports.createCategory = async (req, res) => {
+exports.createCategory = async (req, res,next) => {
   try {
     const cat = await category.create(req.body);
     res.status(201).json({
@@ -26,23 +26,25 @@ exports.getAllCategory = async (req, res) => {
       categories: cat
     });
   } catch (error) {
-    res.status(404).json({
-      success: false,
-      message: "something went wrong",
-      error
-    });
+    // res.status(404).json({
+    //   success: false,
+    //   message: "something went wrong",
+    //   error
+    // });
+    next (error);
   }
 };
 
-exports.getCategoryById = async (req, res) => {
+exports.getCategoryById = async (req, res,next) => {
   try {
     let cat;
     cat = await category.findById(req.params.id);
     if (!cat) {
-      res.status(404).json({
-        success: false,
-        message: `category with id ${req.params.id} is not found`,
-      });
+      // res.status(404).json({
+      //   success: false,
+      //   message: `category with id ${req.params.id} is not found`,
+      // });
+      throw new AppError(404,"category not found");
     }
 
     res.status(200).json({
@@ -51,11 +53,12 @@ exports.getCategoryById = async (req, res) => {
       categorylist: cat,
     });
   } catch (error) {
-    res.status(404).json({
-      success: false,
-      message: "somthing went wrong",
-      error,
-    });
+    next(error)
+    // res.status(404).json({
+    //   success: false,
+    //   message: "somthing went wrong",
+    //   error,
+    // });
   }
 };
 
