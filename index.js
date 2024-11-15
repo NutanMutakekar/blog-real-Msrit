@@ -48,6 +48,7 @@ const express = require("express");
 const connectDB = require("./db");
 connectDB();
 
+const morgan =require('morgan')
 // const category = require("./models/category");
 
 // const blogs = require('./models/blogsM')
@@ -57,8 +58,8 @@ const app = express();
 const categoryRoute=require('./routes/categories');
 
 const blogRoute=require('./routes/blogsR');
-const ErrorHandler = require("./errorHandler/errorHandler");
-
+const ErrorHandler = require('./Middelware/ErrorHandler');
+app.use(morgan('dev'))
 //allow us to read the body of the request
 app.use(express.json());
 
