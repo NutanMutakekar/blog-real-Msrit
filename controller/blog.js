@@ -11,7 +11,7 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
   result = await category.findById(req.params.categoryId);
   // console.log({categoryId:req.paras.categoryId})
   if (!result) {
-    throw new AppError(404, "category not found from create blog");
+    return next(new AppError(404, "category not found from create blog"));
   }
 
   req.body.categoryId = req.params.categoryId;
@@ -50,7 +50,7 @@ exports.getSingleBlog = asyncHandler(async (req, res, next) => {
   let result;
   result = await blogs.findById(req.params.id);
   if (!result) {
-    throw new AppError(404, "blog not found from get single id");
+    return next(new AppError(404, "blog not found from get single id"));
   }
 
   res.status(200).json({
@@ -64,7 +64,7 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
   let result;
   result = await blogs.findById(req.params.id);
   if (!result) {
-    throw new AppError(404, "blog not found form update req");
+    return next(new AppError(404, "blog not found form update req"));
   }
 
   result = await blogs.findByIdAndUpdate(req.params.id, req.body, {
@@ -82,7 +82,7 @@ exports.deleteBlog = asyncHandler(async (req, res, next) => {
   let result;
   result = await blogs.findById(req.params.id);
   if (!result) {
-    throw new AppError(404, "blog not found from del req");
+    return next(new AppError(404, "blog not found from del req"));
   }
 
   result = await blogs.findByIdAndDelete(req.params.id);

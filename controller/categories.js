@@ -24,10 +24,10 @@ exports.getCategoryById = asyncHandler(async (req, res, next) => {
   let cat;
   cat = await category.findById(req.params.id);
   if (!cat) {
-    throw new AppError(
+   return next( new AppError(
       404,
       `category with id ${req.params.id} is not found from  get sing cat req`
-    );
+    ));
   }
 
   res.status(200).json({
@@ -41,10 +41,10 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
   let cat;
   cat = await category.findById(req.params.id);
   if (!cat) {
-    throw new AppError(
+   return next( new AppError(
       404,
       `category with id ${req.params.id} is not found from  get update cat req`
-    );
+    ));
   }
   cat = await category.findByIdAndUpdate(req.params.id, req.body, {
     runValidators: true,
@@ -61,10 +61,10 @@ exports.deleteCategory = asyncHandler(async (req, res, next) => {
   let del;
   del = await category.findById(req.params.id);
   if (!del) {
-    throw new AppError(
+   return next( new AppError(
       404,
       `category with id ${req.params.id} is not found from  delete cat req`
-    );
+    ));
   }
   await blogs.deleteMany({ categoryId: req.params.id });
   del = await category.findByIdAndDelete(req.params.id);
